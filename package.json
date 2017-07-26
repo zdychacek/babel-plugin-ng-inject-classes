@@ -10,7 +10,7 @@
     "pretest": "eslint src test",
     "prepublish": "npm run build"
   },
-  "repository": "knpwrs/babel-plugin-ng-inject",
+  "repository": "git@github.com:zdychacek/babel-plugin-ng-inject-classes.git",
   "keywords": [
     "babel",
     "babel-plugin",
