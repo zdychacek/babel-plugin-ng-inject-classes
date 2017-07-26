@@ -88,3 +88,22 @@ test('it should not inject when decorator is not present', (t) => {
 	t.equal(output, expected);
 	t.end();
 });
+
+test('it should not inject when @Component decorator is present but constructor has a rest argument', (t) => {
+	const input = clean`
+		@Component()
+		class Foo {
+			constructor(...args) {}
+		}
+	`;
+	const output = run(input);
+	const expected = clean`
+		@Component()
+		class Foo {
+			constructor(...args) {}
+		}
+	`;
+
+	t.equal(output, expected);
+	t.end();
+});

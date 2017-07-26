@@ -1,11 +1,13 @@
-const DECORATORS = [ 'Component', 'Directive', 'Controller' ];
+const DECORATORS = [ 'Component', 'Directive', 'Controller', 'Service', 'Filter' ];
 
 function getCtorNode (node) {
 	return node.body.body.find((def) => def.kind === 'constructor');
 }
 
-function getMethodParamNames (node) {
-	return node.params.map((param) => param.name);
+function getMethodParamNames (node, t) {
+	return node.params
+		.filter((param) => t.isIdentifier(param))
+		.map((param) => param.name);
 }
 
 /**
@@ -20,7 +22,10 @@ export default function ({ types: t }) {
 			return;
 		}
 
-		const decoratorNames = path.node.decorators.map((decorator) => decorator.expression.callee.name);
+		const decoratorNames = path.node.decorators
+			.filter((decorator) => decorator.expression.callee)
+			.map((decorator) => decorator.expression.callee.name);
+
 		const hasDecorator = decoratorNames.some((name) => DECORATORS.includes(name));
 
 		if (!hasDecorator) {
@@ -33,7 +38,11 @@ export default function ({ types: t }) {
 			return;
 		}
 
-		const paramNames = getMethodParamNames(ctorNode);
+		const paramNames = getMethodParamNames(ctorNode, t);
+
+		if (!paramNames.length) {
+			return;
+		}
 
 		const injectExp = t.expressionStatement(
 			t.assignmentExpression(
