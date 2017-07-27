@@ -1,6 +1,6 @@
 {
   "name": "@zdychacek/babel-plugin-ng-inject-classes",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Easy Angular dependency injection with Babel.",
   "main": "lib/index.js",
   "scripts": {
@@ -15,9 +15,9 @@
     "babel",
     "babel-plugin",
     "angular",
-		"inject",
-		"decorators",
-		"ES2015"
+    "inject",
+    "decorators",
+    "ES2015"
   ],
   "author": "Ondrej Zdych <ondrej.zdych@firma.seznam.cz>",
   "license": "MIT",
