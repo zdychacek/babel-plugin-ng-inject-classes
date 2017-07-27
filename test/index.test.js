@@ -6,12 +6,12 @@ function clean ([ code ]) {
 	return code.replace(/\n\s*/g, '');
 }
 
-function run (code) {
+function run (code, decoratorNames) {
 	return clean([
 		transform(code, {
 			plugins: [
 				'syntax-decorators',
-				plugin,
+				[ plugin, { decoratorNames } ],
 			],
 		}).code,
 	]);
@@ -24,7 +24,7 @@ test('it should inject when @Component decorator is present', (t) => {
 			constructor($timeout, $element) {}
 		}
 	`;
-	const output = run(input);
+	const output = run(input, [ 'Component' ]);
 	const expected = clean`
 		@Component('foo')
 		class Foo {
@@ -42,7 +42,7 @@ test('it should not inject when @Controller decorator is present and constructor
 		@Controller('foo')
 		class Foo {}
 	`;
-	const output = run(input);
+	const output = run(input, [ 'Controller' ]);
 	const expected = clean`
 		@Controller('foo')
 		class Foo {}
@@ -59,7 +59,7 @@ test('it should inject when @Directive decorator is present and class is exporte
 			constructor($timeout, $element) {}
 		}
 	`;
-	const output = run(input);
+	const output = run(input, [ 'Directive' ]);
 	const expected = clean`
 		export default @Directive('foo')
 		class Foo {
@@ -96,11 +96,30 @@ test('it should not inject when @Component decorator is present but constructor 
 			constructor(...args) {}
 		}
 	`;
-	const output = run(input);
+	const output = run(input, [ 'Component' ]);
 	const expected = clean`
 		@Component()
 		class Foo {
 			constructor(...args) {}
+		}
+	`;
+
+	t.equal(output, expected);
+	t.end();
+});
+
+test('it should not inject when @Component decorator is present and plugin has not `decoratorNames` optio  specified', (t) => { // eslint-disable-line max-len
+	const input = clean`
+		@Component()
+		class Foo {
+			constructor(foo) {}
+		}
+	`;
+	const output = run(input);
+	const expected = clean`
+		@Component()
+		class Foo {
+			constructor(foo) {}
 		}
 	`;
 

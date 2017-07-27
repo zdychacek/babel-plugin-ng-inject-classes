@@ -15,7 +15,9 @@
     "babel",
     "babel-plugin",
     "angular",
-    "inject"
+		"inject",
+		"decorators",
+		"ES2015"
   ],
   "author": "Ondrej Zdych <ondrej.zdych@firma.seznam.cz>",
   "license": "MIT",
